@@ -12,8 +12,8 @@ import java.util.Date;
 public class BaseModel {
     private Boolean isActive;
     private Boolean isDelete;
-    private long createdBy;
-    private long updatedBy;
+    private Long createdBy;
+    private Long updatedBy;
     @CreationTimestamp
     private Date createdDate;
     @UpdateTimestamp
