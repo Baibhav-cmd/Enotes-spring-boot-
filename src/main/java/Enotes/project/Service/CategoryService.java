@@ -1,5 +1,6 @@
 package Enotes.project.Service;
 
+import Enotes.project.Exception.CategoryNotFoundException;
 import Enotes.project.Model.Category;
 import Enotes.project.dto.CategoryDto;
 import Enotes.project.dto.CategoryResponse;
@@ -13,8 +14,9 @@ public interface CategoryService {
     Boolean saveCategory(CategoryDto categoryDto);
     List<CategoryResponse> getAll();
     CategoryResponse getById(long id);
-    Boolean deleteById(long id);
-    Boolean updateById(long id,CategoryDto categoryDto);
+    Boolean deleteById(long id) throws CategoryNotFoundException;
+    Boolean updateById(long id,CategoryDto categoryDto) throws CategoryNotFoundException;
 
     List<CategoryResponse> getActive();
+
 }
