@@ -1,5 +1,6 @@
 package Enotes.project.Service.serviceimpl;
 
+import Enotes.project.Exception.CategoryNotFoundException;
 import Enotes.project.Model.Category;
 import Enotes.project.Repository.CategoryRepository;
 import Enotes.project.Service.CategoryService;
@@ -8,6 +9,7 @@ import Enotes.project.dto.CategoryResponse;
 import Enotes.project.mapper.CategoryMapper;
 import Enotes.project.mapper.CategoryResponseMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +17,10 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl  implements CategoryService  {
   private final CategoryRepository categoryRepository;
   private final CategoryMapper categoryMapper;
   private  final CategoryResponseMapper categoryResponseMapper;
@@ -55,15 +58,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponse getById(long id) {
         Category existingCategory=categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
     return categoryResponseMapper.toDto(existingCategory);
     }
 
     @Override
     @Transactional
-    public Boolean deleteById(long id) {
+    public Boolean deleteById(long id)  {
         Category existing = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
 
         if (Boolean.TRUE.equals(existing.getIsDelete())) {
             // already deleted, nothing to do
@@ -78,9 +81,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Boolean updateById(long id, CategoryDto categoryDto) {
+    public Boolean updateById(long id, CategoryDto categoryDto)  {
         if (categoryDto == null || !StringUtils.hasText(categoryDto.getName())) {
-            throw new IllegalArgumentException("Category name is required");
+            throw new CategoryNotFoundException("Category name is required");
         }
 
         Category existing = categoryRepository.findById(id)

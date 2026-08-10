@@ -1,11 +1,14 @@
 package Enotes.project.Controller;
 
+import Enotes.project.Exception.CategoryNotFoundException;
 import Enotes.project.Model.Category;
 import Enotes.project.Service.CategoryService;
 import Enotes.project.dto.CategoryDto;
 import Enotes.project.dto.CategoryResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/v1/category")
 public class CategoryController {
 
+    private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
     private final CategoryService categoryService;
 
     @GetMapping("/")
@@ -29,6 +33,7 @@ public class CategoryController {
             return ResponseEntity.noContent().build();
         }
 
+        log.info("all user found" );
         return ResponseEntity.ok(categories);
     }
 
@@ -37,7 +42,9 @@ public class CategoryController {
 
         CategoryResponse category = categoryService.getById(id);
 
+        log.info("user found sucessdully");
         return ResponseEntity.ok(category);
+
     }
 
     @PostMapping("/")
@@ -58,7 +65,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable long id,
-            @Valid @RequestBody CategoryDto categoryDto) {
+            @Valid @RequestBody CategoryDto categoryDto){
 
         Boolean updated = categoryService.updateById(id, categoryDto);
 
@@ -87,7 +94,7 @@ public class CategoryController {
     @GetMapping("/active")
     public ResponseEntity<List<CategoryResponse>> getActive() {
 
-        List<CategoryResponse> categories = categoryService.getactive();
+        List<CategoryResponse> categories = categoryService.getActive();
 
         if (CollectionUtils.isEmpty(categories)) {
             return ResponseEntity.noContent().build();
