@@ -1,19 +1,20 @@
 package Enotes.project.Model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Category extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-private long id;
+  private long id;
 
-private String name;
-    @Column(nullable = false)
+   private String name;
 
-    @Size(min = 10, max = 1000, message = "Description must be 10-500 characters")
     private String description;
+    private Boolean isActive;
+    private Boolean isDelete;
 }

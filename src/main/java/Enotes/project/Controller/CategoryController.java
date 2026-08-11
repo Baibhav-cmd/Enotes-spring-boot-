@@ -1,7 +1,5 @@
 package Enotes.project.Controller;
 
-import Enotes.project.Exception.CategoryNotFoundException;
-import Enotes.project.Model.Category;
 import Enotes.project.Service.CategoryService;
 import Enotes.project.dto.CategoryDto;
 import Enotes.project.dto.CategoryResponse;
