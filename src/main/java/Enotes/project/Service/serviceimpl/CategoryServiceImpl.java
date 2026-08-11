@@ -8,6 +8,7 @@ import Enotes.project.dto.CategoryDto;
 import Enotes.project.dto.CategoryResponse;
 import Enotes.project.mapper.CategoryMapper;
 import Enotes.project.mapper.CategoryResponseMapper;
+import Enotes.project.utils.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,6 +25,7 @@ public class CategoryServiceImpl  implements CategoryService  {
   private final CategoryRepository categoryRepository;
   private final CategoryMapper categoryMapper;
   private  final CategoryResponseMapper categoryResponseMapper;
+  private final Validation validation;
 
 
     @Override
@@ -32,7 +34,8 @@ public class CategoryServiceImpl  implements CategoryService  {
         if (categoryDto == null || !StringUtils.hasText(categoryDto.getName())) {
             throw new IllegalArgumentException("Category name is required");
         }
-
+// checking validation
+        validation.categoryValidation(categoryDto);
         Category category = categoryMapper.toEntity(categoryDto);
         category.setIsActive(true);
         category.setIsDelete(false);
