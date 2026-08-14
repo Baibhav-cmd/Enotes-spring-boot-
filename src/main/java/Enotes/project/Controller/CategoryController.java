@@ -5,6 +5,7 @@ import Enotes.project.Model.Category;
 import Enotes.project.Service.CategoryService;
 import Enotes.project.dto.CategoryDto;
 import Enotes.project.dto.CategoryResponse;
+import Enotes.project.utils.CommonUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/")
-    public ResponseEntity<List<CategoryResponse>> getAll() {
+    public ResponseEntity<?> getAll() {
 
         List<CategoryResponse> categories = categoryService.getAll();
 
@@ -33,17 +34,16 @@ public class CategoryController {
             return ResponseEntity.noContent().build();
         }
 
-        log.info("all user found" );
-        return ResponseEntity.ok(categories);
+        log.info("Categories found, count: {}", categories.size());
+        return CommonUtils.createSuccessResponse(categories, HttpStatus.OK, "Categories fetched successfully");
     }
-
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getById(@PathVariable long id) {
+    public ResponseEntity<?> getById(@PathVariable long id) {
 
         CategoryResponse category = categoryService.getById(id);
 
         log.info("user found sucessdully");
-        return ResponseEntity.ok(category);
+        return CommonUtils.createBuilderResponse(category,HttpStatus.FOUND);
 
     }
 
@@ -54,12 +54,10 @@ public class CategoryController {
         Boolean saved = categoryService.saveCategory(categoryDto);
 
         if (saved) {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Category created successfully");
+            return CommonUtils.createBuilderResponseMessage(HttpStatus.CREATED,"saved success");
         }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Failed to create category");
+        return CommonUtils.createdErrorResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR,"not saved");
     }
 
     @PutMapping("/{id}")
@@ -70,11 +68,11 @@ public class CategoryController {
         Boolean updated = categoryService.updateById(id, categoryDto);
 
         if (updated) {
-            return ResponseEntity.ok("Category updated successfully");
+            return  CommonUtils.createBuilderResponseMessage(HttpStatus.CREATED,"update sucessfully");
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Failed to update category");
+        return
+                CommonUtils.createdErrorResponseMessage(HttpStatus.BAD_REQUEST,"failed top update");
     }
 
     @DeleteMapping("/{id}")
