@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findById(long id);
     List<Category> findByIsActiveTrueAndIsDeleteFalse();
+    Boolean existsByName(String name);
 
 }

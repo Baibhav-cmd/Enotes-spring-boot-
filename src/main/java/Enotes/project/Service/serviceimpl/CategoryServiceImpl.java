@@ -33,19 +33,24 @@ public class CategoryServiceImpl  implements CategoryService  {
             throw new IllegalArgumentException("Category name is required");
         }
 
-        Category category = categoryMapper.toEntity(categoryDto);
-        category.setIsActive(true);
-        category.setIsDelete(false);
-
-        try {
-            categoryRepository.save(category);
-            return true;
-        } catch (DataIntegrityViolationException e) {
-            // e.g. duplicate name, DB constraint violation
-            System.out.println(e.getMessage());
-            return false;
+        Boolean existing=categoryRepository.existsByName(categoryDto.getName());
+        if(existing){
+            throw  new RuntimeException("categroy already exists");
         }
-    }
+        else {}
+            Category category = categoryMapper.toEntity(categoryDto);
+            category.setIsActive(true);
+            category.setIsDelete(false);
+
+            try {
+                categoryRepository.save(category);
+                return true;
+            } catch (DataIntegrityViolationException e) {
+                // e.g. duplicate name, DB constraint violation
+                System.out.println(e.getMessage());
+                return false;
+            }
+        }
     @Override
     @Transactional(readOnly = true)
     public List<CategoryResponse> getAll() {
