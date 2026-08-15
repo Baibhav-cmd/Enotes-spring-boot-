@@ -1,6 +1,7 @@
 package Enotes.project.utils;
 
 import Enotes.project.dto.CategoryResponse;
+import Enotes.project.dto.NoteDto;
 import Enotes.project.hanlder.GenericResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +50,13 @@ public class CommonUtils {
             .message(categoriesFetchedSuccessfully)
             .build();
     return response.create();
+    }
+    public static ResponseEntity<?> createSuccessResponseNote(List<NoteDto> categories, HttpStatus httpStatus, String categoriesFetchedSuccessfully) {
+        GenericResponse response=GenericResponse.builder()
+                .responseStatus(httpStatus)
+                .data(categories)
+                .message(categoriesFetchedSuccessfully)
+                .build();
+        return response.create();
     }
 }

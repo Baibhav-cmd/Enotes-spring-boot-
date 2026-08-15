@@ -40,7 +40,7 @@ public class CategoryController {
 
         CategoryResponse category = categoryService.getById(id);
 
-        log.info("user found sucessdully");
+        log.info("category not found sucessdully");
         return CommonUtils.createBuilderResponse(category,HttpStatus.FOUND);
 
     }
